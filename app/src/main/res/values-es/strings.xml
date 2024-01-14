@@ -33,4 +33,12 @@
     <string name="Profile">Perfil</string>
     <string name="Loading_picture">Cargando imagen...</string>
     <string name="Introduce_credentials">Debe introducir todas las credenciales</string>
+    <string name="Error_save_task">Ha ocurrido un error mientras se guardaba la tarea.</string>
+    <string name="Error_load_task">Ha ocurrido un error mientras se cargaban las tareas.</string>
+    <string name="Error_delete_task">Ha ocurrido un error mientras se borraba la tarea.</string>
+    <string name="Error_check_task">Ha ocurride un error marcando la tarea.</string>
+    <string name="Error_SignUp">Error en el registro.</string>
+    <string name="Error_get_picture">Error obteniendo la imagen de perfil.</string>
+    <string name="Error_save_picture">Error guardando la imagen.</string>
+    <string name="Error_LogIn">Error iniciando sesión.</string>
 </resources>

@@ -33,4 +33,12 @@
     <string name="Profile">Profile</string>
     <string name="Loading_picture">Loading picture...</string>
     <string name="Introduce_credentials">You need to introduce all the credentials</string>
+    <string name="Error_save_task">An error occured while saving the task.</string>
+    <string name="Error_load_task">An error ocurred while loading the tasks.</string>
+    <string name="Error_delete_task">An error ocurred while deleting the task.</string>
+    <string name="Error_check_task">An error ocurred checking the task.</string>
+    <string name="Error_SignUp">Error signing up.</string>
+    <string name="Error_get_picture">Error getting the profile picture.</string>
+    <string name="Error_save_picture">Error saving the picture.</string>
+    <string name="Error_LogIn">Error logging in.</string>
 </resources>

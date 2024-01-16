@@ -23,14 +23,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import controllers.DatabaseController;
+import controllers.DatabaseControllerDeprecated;
 import models.ProviderType;
 
 public class LoginActivtity extends AppCompatActivity {
 
     private final int GOOGLE_SIGN_IN = 100;
 
-    private DatabaseController controller;
+    private DatabaseControllerDeprecated controller;
 
     private EditText edt_email;
     private EditText edt_password;
@@ -40,7 +40,7 @@ public class LoginActivtity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_activtity);
 
-        controller = new DatabaseController(null, this);
+        controller = new DatabaseControllerDeprecated(null, this);
 
         edt_email = findViewById(R.id.edtEmail);
         edt_password = findViewById(R.id.edtPassword);

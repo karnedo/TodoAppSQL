@@ -15,7 +15,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,26 +23,16 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
 
 import controllers.DatabaseController;
+import controllers.TaskDB;
+import controllers.DatabaseControllerDeprecated;
 import models.Task;
 
 
@@ -52,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements TaskListActivity{
     public static final int NEW_IMAGE = 1;
 
     private RecyclerView rv_tasks;
-    private DatabaseController controller;
+    private DatabaseControllerDeprecated controller;
     private ImageButton ib_Profile;
     private TaskListAdapter adapter;
     private ArrayList<Task> taskList;
@@ -65,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements TaskListActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ib_Profile = findViewById(R.id.ib_Profile);
-        controller = new DatabaseController(this, getApplicationContext());
+        controller = new DatabaseControllerDeprecated(this, getApplicationContext());
         taskList = new ArrayList<>(0);
 
         //Guardado del usuario
@@ -162,9 +151,14 @@ public class MainActivity extends AppCompatActivity implements TaskListActivity{
                     Bundle extras = o.getData().getExtras();
                     Task task = (Task) extras.getSerializable(AddCardActivity.NEW_TASK);
 
-                    //Y la anyadimos al RecyclerView
-                    adapter.addTask(task);
-                    controller.saveTask(task, email);
+                    boolean taskAdded = DatabaseController.saveTask(task, email);
+                    if(taskAdded){
+                        adapter.addTask(task);
+                    }else{
+                        Toast.makeText(MainActivity.this,
+                                MainActivity.this.getResources().getString(R.string.Error_save_task),
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
     });

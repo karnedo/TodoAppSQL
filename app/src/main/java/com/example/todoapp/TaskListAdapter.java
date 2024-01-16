@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -18,6 +19,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import controllers.DatabaseController;
+import controllers.DatabaseControllerDeprecated;
 import models.Task;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder>{
@@ -27,9 +29,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder>{
     private final Context context;
 
     private final LayoutInflater inflater;
-    private DatabaseController controller;
+    private DatabaseControllerDeprecated controller;
 
-    public TaskListAdapter(ArrayList<Task> tasks, Context context, DatabaseController controller) {
+    public TaskListAdapter(ArrayList<Task> tasks, Context context, DatabaseControllerDeprecated controller) {
         this.tasks = tasks;
         this.context = context;
         this.inflater = LayoutInflater.from(this.context);
@@ -68,11 +70,17 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder>{
             public void onClick(View v){
                 //Si el botón de borrar se presiona, se borra la tarea seleccionada.
                 int pos = holder.getListPosition();
-                Log.d("MyApp", "POSITION: " + pos);
-                controller.deleteTask(context, tasks.get(pos));
-                tasks.remove(pos);
-                notifyItemRemoved(pos);
-                notifyItemRangeChanged(pos, tasks.size());
+                boolean couldDelete = DatabaseController.deleteTask(tasks.get(pos));
+                if(couldDelete){
+                    tasks.remove(pos);
+                    notifyItemRemoved(pos);
+                    notifyItemRangeChanged(pos, tasks.size());
+                }else{
+                    Toast.makeText(context,
+                            context.getResources().getString(R.string.Error_delete_task),
+                            Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

@@ -8,7 +8,7 @@ include 'connection.php';
 $email = mysqli_real_escape_string($connection, $_POST['email']);
 $password = mysqli_real_escape_string($connection, $_POST['password']);
 
-$query = "INSERT INTO kraUSERS (idUser, email, password, picture) VALUES (NULL, '$email', '$password', NULL)";
+$query = "INSERT INTO kraUSERS (email, password, picture) VALUES ('$email', '$password', NULL)";
 
 $result = mysqli_query($connection, $query);
 

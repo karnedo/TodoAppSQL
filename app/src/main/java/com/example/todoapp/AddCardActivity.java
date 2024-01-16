@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import controllers.DatabaseController;
 import models.Task;
 
 public class AddCardActivity extends AppCompatActivity {

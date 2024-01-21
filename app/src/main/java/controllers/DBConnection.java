@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
+    //For correction: Replace with your database's IP.
     public static final String HOST = "192.168.1.71";
     private static final String DATABASE_NAME = "productosdb";
     private static final String PORT = "3306";

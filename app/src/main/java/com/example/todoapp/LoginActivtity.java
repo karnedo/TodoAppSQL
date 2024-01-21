@@ -23,14 +23,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import controllers.DatabaseControllerDeprecated;
+import controllers.DatabaseController;
 import models.ProviderType;
 
 public class LoginActivtity extends AppCompatActivity {
 
     private final int GOOGLE_SIGN_IN = 100;
-
-    private DatabaseControllerDeprecated controller;
 
     private EditText edt_email;
     private EditText edt_password;
@@ -39,8 +37,6 @@ public class LoginActivtity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_activtity);
-
-        controller = new DatabaseControllerDeprecated(null, this);
 
         edt_email = findViewById(R.id.edtEmail);
         edt_password = findViewById(R.id.edtPassword);
@@ -80,14 +76,20 @@ public class LoginActivtity extends AppCompatActivity {
     }
 
     private void signIn(String email, String password){
-        controller.logIn(email, password, this);
+        DatabaseController.logIn(email, password);
     }
 
     public void signUpOnClick(View view){
         String email = String.valueOf(edt_email.getText());
         String password = String.valueOf(edt_password.getText());
         if( !email.isEmpty() && !password.isEmpty() ){
-            controller.signUp(email, password, this);
+            if(!DatabaseController.signUp(email, password)){
+                Toast.makeText(this,
+                        getResources().getString(R.string.Error_SignUp),
+                        Toast.LENGTH_SHORT).show();
+            }else{
+                logIn(ProviderType.EMAIL, email);
+            }
         }
     }
 

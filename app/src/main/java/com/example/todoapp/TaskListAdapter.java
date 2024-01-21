@@ -3,7 +3,6 @@ package com.example.todoapp;
 import static com.example.todoapp.R.layout.task_rv;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import controllers.DatabaseController;
-import controllers.DatabaseControllerDeprecated;
 import models.Task;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder>{
@@ -29,13 +27,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder>{
     private final Context context;
 
     private final LayoutInflater inflater;
-    private DatabaseControllerDeprecated controller;
 
-    public TaskListAdapter(ArrayList<Task> tasks, Context context, DatabaseControllerDeprecated controller) {
+    public TaskListAdapter(ArrayList<Task> tasks, Context context) {
         this.tasks = tasks;
         this.context = context;
         this.inflater = LayoutInflater.from(this.context);
-        this.controller = controller;
     }
 
     @NonNull
@@ -89,21 +85,27 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder>{
             public void onClick(View v){
                 boolean checked = holder.getCb_done().isChecked();
                 int pos = holder.getListPosition();
-                //Actualizamos la tarea en la base de datos
-                controller.checkTask(context, tasks.get(pos), checked);
+                //Actualizamos la tareaen
+                boolean success = DatabaseController.checkTask(tasks.get(pos), checked);
 
-                //Mostramos el botón de borrar si la tarea está completada.
-                holder.getFab_button().setVisibility( (checked) ? View.VISIBLE : View.GONE );
-                task.setChecked(checked);
-                notifyItemChanged(pos);
+                if(success){
+                    //Mostramos el botón de borrar si la tarea está completada.
+                    holder.getFab_button().setVisibility( (checked) ? View.VISIBLE : View.GONE );
+                    task.setChecked(checked);
+                    notifyItemChanged(pos);
 
-                //Task movedTask = tasks.get(pos);
-                if(checked){
-                    //Lo llevamos al final de la lista
-                    moveTaskToEnd(pos);
+                    if(checked){
+                        //Lo llevamos al final de la lista
+                        moveTaskToEnd(pos);
+                    }else{
+                        moveTaskToStart(pos);
+                    }
                 }else{
-                    moveTaskToStart(pos);
+                    Toast.makeText(context,
+                            context.getResources().getString(R.string.Error_check_task),
+                            Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
     }

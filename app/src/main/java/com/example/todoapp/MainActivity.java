@@ -19,7 +19,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -31,8 +30,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import controllers.DatabaseController;
-import controllers.TaskDB;
-import controllers.DatabaseControllerDeprecated;
 import models.Task;
 
 
@@ -41,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements TaskListActivity{
     public static final int NEW_IMAGE = 1;
 
     private RecyclerView rv_tasks;
-    private DatabaseControllerDeprecated controller;
     private ImageButton ib_Profile;
     private TaskListAdapter adapter;
     private ArrayList<Task> taskList;
@@ -54,15 +50,14 @@ public class MainActivity extends AppCompatActivity implements TaskListActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ib_Profile = findViewById(R.id.ib_Profile);
-        controller = new DatabaseControllerDeprecated(this, getApplicationContext());
         taskList = new ArrayList<>(0);
 
         //Guardado del usuario
         Bundle bundle = getIntent().getExtras();
         email = bundle.getString("email");
         String provider = bundle.getString("provider");
-        controller.loadTasks(email);
-        controller.getProfilePicture(email);
+        taskList = DatabaseController.loadTasks(email, this);
+        setProfilePic(DatabaseController.getProfilePicture(email));
 
         //Guardamos el usuario en el dispositivo, para así no requerir el inición de sesión
         //cada vez que abra la app
@@ -72,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements TaskListActivity{
 
         rv_tasks = findViewById(R.id.rv_tasks);
 
-        adapter = new TaskListAdapter(taskList, this, controller);
+        adapter = new TaskListAdapter(taskList, this);
         rv_tasks.setAdapter(adapter);
         int orientation = getResources().getConfiguration().orientation;
         if(orientation == Configuration.ORIENTATION_LANDSCAPE){
@@ -189,10 +184,10 @@ public class MainActivity extends AppCompatActivity implements TaskListActivity{
             try {
                 Toast.makeText(MainActivity.this, getString(R.string.Loading_picture),
                     Toast.LENGTH_LONG).show();
-                //Obtenemos la imagen como un bitmap y la subimos a Storage tal cual
+                //Obtenemos la imagen como un bitmap y la subimos a la base de datos
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 ib_Profile.setImageBitmap(bitmap);
-                controller.saveProfilePicture(email, bitmap);
+                DatabaseController.setProfilePicture(email, bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }

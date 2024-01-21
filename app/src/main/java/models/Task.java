@@ -51,6 +51,14 @@ public class Task implements Serializable {
         isChecked = false;
     }
 
+    public Task(int id, String name, Date date, Priority priority, boolean isChecked) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.priority = priority;
+        this.isChecked = isChecked;
+    }
+
     public Task(Task task){
         this.id = task.id;
         this.name = task.name;

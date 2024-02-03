@@ -52,18 +52,22 @@ public class MainActivity extends AppCompatActivity implements TaskListActivity{
         ib_Profile = findViewById(R.id.ib_Profile);
         taskList = new ArrayList<>(0);
 
-        //Guardado del usuario
+        //Si no hay ningún usuario, ir a la pantalla de sesión
         Bundle bundle = getIntent().getExtras();
-        email = bundle.getString("email");
-        String provider = bundle.getString("provider");
-        taskList = DatabaseController.loadTasks(email, this);
-        setProfilePic(DatabaseController.getProfilePicture(email));
+        if(bundle.getString("email") != null){
+            email = bundle.getString("email");
+            String provider = bundle.getString("provider");
+            taskList = DatabaseController.loadTasks(email, this);
+            setProfilePic(DatabaseController.getProfilePicture(email));
 
-        //Guardamos el usuario en el dispositivo, para así no requerir el inición de sesión
-        //cada vez que abra la app
-        SharedPreferences preferences = getSharedPreferences("com.example.todoapp", MODE_PRIVATE);
-        preferences.edit().putString("email", email).apply();
-        preferences.edit().putString("provider", provider).apply();
+            //Guardamos el usuario en el dispositivo, para así no requerir el inición de sesión
+            //cada vez que abra la app
+            SharedPreferences preferences = getSharedPreferences("com.example.todoapp", MODE_PRIVATE);
+            preferences.edit().putString("email", email).apply();
+            preferences.edit().putString("provider", provider).apply();
+        }else{
+            closeSession();
+        }
 
         rv_tasks = findViewById(R.id.rv_tasks);
 
@@ -139,24 +143,24 @@ public class MainActivity extends AppCompatActivity implements TaskListActivity{
     ActivityResultLauncher<Intent> taskAdder = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult o) {
-                if(o.getResultCode() == RESULT_OK){
-                    //Obtenemos el Bundle y la tarea
-                    Bundle extras = o.getData().getExtras();
-                    Task task = (Task) extras.getSerializable(AddCardActivity.NEW_TASK);
+                @Override
+                public void onActivityResult(ActivityResult o) {
+                    if(o.getResultCode() == RESULT_OK){
+                        //Obtenemos el Bundle y la tarea
+                        Bundle extras = o.getData().getExtras();
+                        Task task = (Task) extras.getSerializable(AddCardActivity.NEW_TASK);
 
-                    boolean taskAdded = DatabaseController.saveTask(task, email);
-                    if(taskAdded){
-                        adapter.addTask(task);
-                    }else{
-                        Toast.makeText(MainActivity.this,
-                                MainActivity.this.getResources().getString(R.string.Error_save_task),
-                                Toast.LENGTH_SHORT).show();
+                        boolean taskAdded = DatabaseController.saveTask(task, email);
+                        if(taskAdded){
+                            adapter.addTask(task);
+                        }else{
+                            Toast.makeText(MainActivity.this,
+                                    MainActivity.this.getResources().getString(R.string.Error_save_task),
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
-            }
-    });
+            });
 
     @Override
     public void addTask(Task task) {
@@ -183,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements TaskListActivity{
             Bitmap bitmap = null;
             try {
                 Toast.makeText(MainActivity.this, getString(R.string.Loading_picture),
-                    Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();
                 //Obtenemos la imagen como un bitmap y la subimos a la base de datos
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 ib_Profile.setImageBitmap(bitmap);

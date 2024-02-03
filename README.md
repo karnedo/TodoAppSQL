@@ -1,14 +1,29 @@
 # To-do App
 
-### RecyclerView
-Las tareas se muestras en una lista contenida en el RecyclerView. Al añadir una tarea, esta se mostrará en la primera posición. Al marcarla como terminada, se irá a la última posición. 
+# Modelo-Vista-Controlador
+La aplicación está construída en base a la arquitectura Modelo-Vista-Controlador, utilizando los controladores
+para la conexión a la base de datos
 
-### Firebase Realtime
-La aplicación almacena las tareas introducidas por el usuario con su nombre, su fecha de cumplimiento y su prioridad. Éstas se puedan marcar como completadas o borrarlas, todo ello siendo actualizado en tiempo real en la base de datos.
+# Características
+Las características de la aplicación son idénticas a las de su proyecto precedesor con Volley, solo
+que este hace uso del conector JDBC:
 
-### Firebase Auth
-La aplicación permite el registro introduciendo un correo electrónico y contraseña, o directamente haciendo inicio de sesión con una cuenta Google. Las tareas no son públicas, es decir, cada usuario tiene su propia lista de tareas privada.
-El inicio de sesión se guarda automáticamente. Una vez introducida una cuenta, no se volverá a pedir al usuario. **Si se desea salir de la sesión, se puede hacer click en la imagen superior derecha.**
+## CRUD
 
-### Firebase Storage
-La aplicación guarda imágenes en forma de fotos de perfil que aparecerán en la esquina superior derecha. **Para cambiar la foto, mantenga presionada la imagen superior derecha.** La imagen por defecto es el logo de la aplicación.
+La aplicación realiza un CRUD para las tareas, además de presentar la habilidad de subir y descargar
+imágenes, así como una pantalla de registro e inicio de sesión.
+
+## Base de datos
+
+El fichero SQL con la estructura de la base de datos se encuentra en el directorio raíz bajo el nombre
+de "database". Este está preparado para ser importando directamente desde la página de PhpMyAdmin. En adición, también se encuentran los ficheros PHP.
+
+El resto de características son idénticas a su proyecto homólogo de Firebase.
+
+## Corrección
+
+Para la corrección de la aplicación, asegúrese de que cambia el valor de la variable HOST
+de la clase DBConnection a la IP de su servidor. Si no tiene el puerto por defecto que utiliza MySQL, cambie la variable PORT.
+Asimismo, cambie el usuario y la contraseña al usuario donde tenga la base de datos. La base de datos es la misma que la
+del proyecto anterior. Igualmente se ha proporcionado en el directorio raíz del proyecto
+un fichero SQL con el que podrá importar esa misma base de datos.

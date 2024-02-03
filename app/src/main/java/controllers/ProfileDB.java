@@ -38,6 +38,7 @@ public class ProfileDB {
         } finally{
             try {
                 sentence.close();
+                DBConnection.closeConnection(conn);
             } catch (SQLException | NullPointerException e) {}
             return sucess;
         }
@@ -61,6 +62,7 @@ public class ProfileDB {
         } finally{
             try {
                 if(sentence != null) sentence.close();
+                DBConnection.closeConnection(conn);
             } catch (SQLException | NullPointerException e) {}
         }
     }
@@ -89,7 +91,7 @@ public class ProfileDB {
                 if (preparedStatement != null) {
                     preparedStatement.close();
                 }
-                conn.close();
+                DBConnection.closeConnection(conn);
             } catch (SQLException e) {
                 e.printStackTrace(); // Handle the exception properly
             }
@@ -117,6 +119,7 @@ public class ProfileDB {
         } finally{
             try {
                 if(sentence != null) sentence.close();
+                DBConnection.closeConnection(conn);
             } catch (SQLException | NullPointerException e) {}
         }
 
